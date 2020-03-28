@@ -1,0 +1,4 @@
+token
+*_creds*
+.vscode
+__pycache__
