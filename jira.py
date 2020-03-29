@@ -21,7 +21,7 @@ def create_jira_config():
     }
 
     if not dd_client.exists_jira_url(jira_url):
-        dd_client.create_jira_config(config)
+        dd_client.post_create_data('jira_configurations', config)
 
 
 if __name__ == "__main__":
@@ -30,4 +30,5 @@ if __name__ == "__main__":
 
     dd_client = dojo.DojoClient(base_url=dd_api_url, api_key=dd_token)
 
-    create_jira_config()
+    if dd_client.is_dojo_up():
+        create_jira_config()
