@@ -25,6 +25,9 @@ Run `import_initial_data.py`. It will create a product, an engagement and a test
 ```
 dd_api_url="http://localhost:8080/api/v2"
 reports_directory="/your/directory"
+jira_url="https://whatever.atlassian.net"
+jira_project="MADBOX"
+enable_jira_for_product="True"
 ```
 
 Create sub-directories for each scanner. The name of these directory must exactly match the scanner names per `factory.py`.
