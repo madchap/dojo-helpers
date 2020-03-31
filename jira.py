@@ -1,10 +1,11 @@
 import dojo
 import _jira_creds
+import _config
 
 
 def create_jira_config():
 
-    jira_url = "https://defectdojo.atlassian.net"
+    jira_url = _config.jira_url
     config = {
         "configuration_name": "DefectDojo test site",
         "url": jira_url,
@@ -25,7 +26,7 @@ def create_jira_config():
 
 
 if __name__ == "__main__":
-    dd_api_url = "http://localhost:8080/api/v2"
+    dd_api_url = _config.dd_api_url
     dd_token = open('token', 'r').readline().strip()
 
     dd_client = dojo.DojoClient(base_url=dd_api_url, api_key=dd_token)
