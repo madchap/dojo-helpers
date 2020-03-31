@@ -29,3 +29,12 @@ reports_directory="/your/directory"
 
 Create sub-directories for each scanner. The name of these directory must exactly match the scanner names per `factory.py`.
 Put corresponding valid reports in each of these directories. They will be slurped in.
+
+## JIRA creds
+Create a file `_jira_creds.py` with the following format:
+
+```
+username="likely_your_email_address"
+password="your_api_key"
+```
+
