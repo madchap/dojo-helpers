@@ -8,6 +8,7 @@ import io
 import os
 from pathlib import Path
 from distutils.util import strtobool
+import re
 
 
 def create_test_product():
@@ -65,6 +66,19 @@ def enable_product_for_jira(product_id):
 
     dd_client.post_create_data('jira_product_configurations', product_jira_config)
 
+def get_files_from_directory(directory):
+    # skip directory starting with underscore
+    if re.search("^_.*", directory.name):
+        return []
+
+    for element in os.scandir(directory):
+        if element.is_dir():
+            get_files_from_directory(element)
+        if element.is_file():
+            filenames.append(element)
+    
+    return filenames
+
 
 if __name__ == "__main__":
     dd_api_url = _config.dd_api_url
@@ -96,8 +110,10 @@ if __name__ == "__main__":
          
         # import scans in test
         # Loop over each subdirectories, each having to be named per the scanner name in factory.py
+        # if directory starts with an underscore, skip it
         reports_directories = rf'{_config.reports_directory}'
+        filenames = []
         for scanner_directory in os.scandir(reports_directories):
-            for filename in os.scandir(scanner_directory.path):
-                if filename.is_file():
-                    import_scan_in_test(engagement_id, scanner_directory.name, Path(filename).absolute())
+            files = get_files_from_directory(scanner_directory)
+            for filename in files:
+                import_scan_in_test(engagement_id, Path(filename).absolute().parent.name, Path(filename).absolute())
