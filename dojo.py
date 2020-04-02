@@ -57,12 +57,46 @@ class DojoClient:
         url = f'{self._base_url}/{endpoint}/{entity_id}'
         r = requests.get(url, headers=self._headers)
         return r.json()
+    
+    def get_all_data(self, endpoint: int) -> dict:
+        url = f'{self._base_url}/{endpoint}/'
+        results = []
+        waiting_char = "."
+        print("Getting results", end = '')
+        while url is not None:
+            print(waiting_char, end = '')
+            with requests.get(url, headers=self._headers) as r:
+                body = r.json()
+            results.extend(body.get('results', []))
+            url = body.get('next')
+        print()
+        return results
+
+    def get_findings_results(self, query, entity_id: int):
+        results = []
+        url = f'{self._base_url}/findings/?{query}={entity_id}'
+        waiting_char = "."
+        print("Getting findings", end = '')
+        while url is not None:
+            print(waiting_char, end = '')
+            with requests.get(url, headers=self._headers) as r:
+                body = r.json()
+            results.extend(body.get('results', []))
+            url = body.get('next')
+        print()
+        return results
 
     def delete_data(self, endpoint, entity_id: int) -> dict:
         """ returns a json """
         url = f'{self._base_url}/{endpoint}/{entity_id}'
         r = requests.delete(url, headers=self._headers)
         return r.json()
+    
+    def patch_data(self, dd_endpoint, dd_entity_id, info_dict: dict):
+        url = f'{self._base_url}/{dd_endpoint}/{dd_entity_id}/'
+        r = requests.patch(url, json=info_dict, headers=self._headers)
+        print(f"{r.status_code} - {r.text}")
+        return r.status_code
     
     def import_report(self, file_data, data_dict: dict):
         import_headers = {'authorization': 'token ' + self._api_key}
