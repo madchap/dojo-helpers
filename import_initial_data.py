@@ -112,8 +112,8 @@ if __name__ == "__main__":
         # Loop over each subdirectories, each having to be named per the scanner name in factory.py
         # if directory starts with an underscore, skip it
         reports_directories = rf'{_config.reports_directory}'
-        filenames = []
         for scanner_directory in os.scandir(reports_directories):
+            filenames = []
             files = get_files_from_directory(scanner_directory)
             for filename in files:
                 import_scan_in_test(engagement_id, Path(filename).absolute().parent.name, Path(filename).absolute())
