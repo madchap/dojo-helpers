@@ -33,6 +33,10 @@ enable_jira_for_product="True"
 Create sub-directories for each scanner. The name of these directory must exactly match the scanner names per `factory.py`.
 Put corresponding valid reports in each of these directories. They will be slurped in.
 
+### TODO
+* (API for system settings) https://github.com/DefectDojo/django-DefectDojo/issues/2135
+* Integrate specific per-parser dedup confguration through intelligent sed ?
+
 ## JIRA creds
 Create a file `_jira_creds.py` with the following format:
 
