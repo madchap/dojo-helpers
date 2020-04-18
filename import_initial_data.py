@@ -67,16 +67,18 @@ def enable_product_for_jira(product_id):
     dd_client.post_create_data('jira_product_configurations', product_jira_config)
 
 def get_files_from_directory(directory):
-    # skip directory starting with underscore
-    if re.search("^_.*", directory.name):
-        return []
-
-    for element in os.scandir(directory):
-        if element.is_dir():
+    try:
+        for element in os.scandir(directory):
+            if element.is_dir():
+                # skip directory starting with underscore
+                if re.search("^_.*", directory.name):
+                    return []
             get_files_from_directory(element)
-        if element.is_file():
-            filenames.append(element)
-    
+            if element.is_file():
+                filenames.append(element)
+    except NotADirectoryError as e:
+        pass
+
     return filenames
 
 
