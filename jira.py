@@ -18,7 +18,7 @@ def create_jira_config():
         "low_mapping_severity": "Low",
         "medium_mapping_severity": "Medium",
         "high_mapping_severity": "High",
-        "critical_mapping_severity": "Critical",
+        "critical_mapping_severity": "Highest",
     }
 
     if not dd_client.exists_jira_url(jira_url):
@@ -31,5 +31,5 @@ if __name__ == "__main__":
 
     dd_client = dojo.DojoClient(base_url=dd_api_url, api_key=dd_token)
 
-    if dd_client.is_dojo_up():
+    if dd_client.check_valid_token() and dd_client.is_dojo_up():
         create_jira_config()

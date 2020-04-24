@@ -35,6 +35,14 @@ class DojoClient:
         r = requests.patch(url, json=finding_status_info, headers=self._headers)
         print(r.text)
         return r.status_code
+
+    def check_valid_token(self):
+        j = self.get_data("test_types", 1)
+        if j.get('detail') == 'Invalid token.':
+            print("Please update your token, it is invalid.")
+            return False
+        return True
+        
     
     def exists_jira_url(self, jira_config_url):
         url = f'{self._base_url}/jira_configurations/'
@@ -42,7 +50,8 @@ class DojoClient:
         if r.json().get('count') == 0:
             return False
         else:
-            print(f"JIRA configuration for url {jira_config_url} already exists.")
+            # print(f"JIRA configuration for url {jira_config_url} already exists.")
+            print("A JIRA configuration was found. Aborting.")
             return True
 
     def post_create_data(self, endpoint, data_dict: dict):
