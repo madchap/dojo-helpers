@@ -67,7 +67,7 @@ class DojoClient:
         r = requests.get(url, headers=self._headers)
         return r.json()
     
-    def get_all_data(self, endpoint: int) -> dict:
+    def get_all_data(self, endpoint) -> dict:
         url = f'{self._base_url}/{endpoint}/'
         results = []
         waiting_char = "."
