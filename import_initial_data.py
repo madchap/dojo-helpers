@@ -84,7 +84,7 @@ def get_files_from_directory(directory):
 
 if __name__ == "__main__":
     dd_api_url = _config.dd_api_url
-    dd_token = open('token', 'r').readline().strip()
+    dd_token = _config.dd_token
     dd_client = dojo.DojoClient(base_url=dd_api_url, api_key=dd_token)
 
     start = date.today()

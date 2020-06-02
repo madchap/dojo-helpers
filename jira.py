@@ -14,7 +14,7 @@ def create_jira_config():
         "epic_name_id": "10011",
         "open_status_key": "11",
         "close_status_key": "41",
-        "info_mapping_severity": "Info",
+        "info_mapping_severity": "Lowest",
         "low_mapping_severity": "Low",
         "medium_mapping_severity": "Medium",
         "high_mapping_severity": "High",
@@ -27,7 +27,7 @@ def create_jira_config():
 
 if __name__ == "__main__":
     dd_api_url = _config.dd_api_url
-    dd_token = open('token', 'r').readline().strip()
+    dd_token = _config.dd_token
 
     dd_client = dojo.DojoClient(base_url=dd_api_url, api_key=dd_token)
 
