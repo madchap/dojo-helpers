@@ -17,18 +17,22 @@ class DojoClient:
         else:
             return True
 
-    def get_findings(self, engagement_id: int):
-        findings = []
-        url = f'{self._base_url}/findings/?test__engagement={engagement_id}'
+    def get_findings_results(self, query, entity_id: int):
+        results = []
+        url = f'{self._base_url}/findings/?{query}={entity_id}'
+        print(f"Querying {url}")
+        waiting_char = "."
         page = 1
         while url is not None:
-            print(f"Page {page} for findings in engagement {engagement_id}")
+            # print(f"Page {page}")
             page += 1
+            print(waiting_char, end = '', flush=True)
             with requests.get(url, headers=self._headers) as r:
                 body = r.json()
-            findings.extend(body.get('results', []))
+            results.extend(body.get('results', []))
             url = body.get('next')
-        return findings
+        print()
+        return results
 
     def patch_finding_status(self, finding_id, finding_status_info: dict):
         url = f'{self._base_url}/findings/{finding_id}/'
@@ -81,19 +85,6 @@ class DojoClient:
         print()
         return results
 
-    def get_findings_results(self, query, entity_id: int):
-        results = []
-        url = f'{self._base_url}/findings/?{query}={entity_id}'
-        waiting_char = "."
-        print("Getting findings", end = '')
-        while url is not None:
-            print(waiting_char, end = '')
-            with requests.get(url, headers=self._headers) as r:
-                body = r.json()
-            results.extend(body.get('results', []))
-            url = body.get('next')
-        print()
-        return results
 
     def delete_data(self, endpoint, entity_id: int) -> dict:
         """ returns a json """

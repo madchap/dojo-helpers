@@ -47,7 +47,7 @@ if __name__ == "__main__":
     issue_key = args.jirakey
 
     try:
-        jira = JIRA(server=_jira_creds.url, basic_auth=(_jira_creds.username, _jira_creds.token))
+        jira = JIRA(server=_config.jira_url, basic_auth=(_jira_creds.username, _jira_creds.token))
         issue = jira.issue(issue_key)
     except exceptions.JIRAError as e:
         print(e)
