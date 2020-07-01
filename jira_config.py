@@ -10,7 +10,7 @@ def create_jira_config():
         "configuration_name": "DefectDojo test site",
         "url": jira_url,
         "username": _jira_creds.username,
-        "password": _jira_creds.password,
+        "password": _jira_creds.token,
         "epic_name_id": "10011",
         "open_status_key": "11",
         "close_status_key": "41",
