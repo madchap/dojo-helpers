@@ -4,7 +4,6 @@ from datetime import date
 from datetime import timedelta
 import random
 import string
-import io
 import os
 from pathlib import Path
 from distutils.util import strtobool
@@ -27,7 +26,8 @@ def create_test_engagement(product_id):
         "target_start": target_start,
         "target_end": target_end,
         "product": product_id,
-        "active": True
+        "active": True,
+        "engagement_type": "CI/CD"
     }
 
     return dd_client.post_create_data('engagements', engagement_config)
@@ -89,9 +89,6 @@ if __name__ == "__main__":
 
     start = date.today()
     end = start + timedelta(days=7)
-    # used for engagement...
-    target_start = start.isoformat()
-    target_end = end.isoformat()
     # used for tests...
     test_target_start = start.strftime("%Y-%m-%dT%H:%M:%SZ")
     test_target_end = end.strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -105,17 +102,17 @@ if __name__ == "__main__":
             enable_product_for_jira(product_id)
         
         # create an engagement
-        engagement_id = create_test_engagement(product_id)
+        for x in range(0, 2):
+            target_start = (start - timedelta(days=random.randint(20, 100))).isoformat()
+            target_end = end.isoformat()
+            engagement_id = create_test_engagement(product_id)
 
-        # create a test
-        # test_id = create_test_test(engagement_id, 101)  # anchore
-         
-        # import scans in test
-        # Loop over each subdirectories, each having to be named per the scanner name in factory.py
-        # if directory starts with an underscore, skip it
-        reports_directories = rf'{_config.reports_directory}'
-        for scanner_directory in os.scandir(reports_directories):
-            filenames = []
-            files = get_files_from_directory(scanner_directory)
-            for filename in files:
-                import_scan_in_test(engagement_id, Path(filename).absolute().parent.name, Path(filename).absolute())
+            # import scans in test
+            # Loop over each subdirectories, each having to be named per the scanner name in factory.py
+            # if directory starts with an underscore, skip it
+            reports_directories = rf'{_config.reports_directory}'
+            for scanner_directory in os.scandir(reports_directories):
+                filenames = []
+                files = get_files_from_directory(scanner_directory)
+                for filename in files:
+                    import_scan_in_test(engagement_id, Path(filename).absolute().parent.name, Path(filename).absolute())
