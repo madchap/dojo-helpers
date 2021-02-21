@@ -5,11 +5,11 @@ import _config
 def update_settings():
 
     config = {
-        "enable_auditlog": "true",
+        "enable_auditlog": "false",
         "enable_deduplication": "true",
         "enable_jira": "true",
     }
-    dd_client.put_data('system_settings', dd_entity_id=1, info_dict=config)
+    dd_client.patch_data('system_settings', dd_entity_id=1, info_dict=config)
 
 
 if __name__ == "__main__":
