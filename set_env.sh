@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-set -xe
+set -e
+set -o pipefail
 
 # DD or CB or ...
 TARGET_ENV="$1"

@@ -27,7 +27,8 @@ def create_test_engagement(product_id):
         "target_end": target_end,
         "product": product_id,
         "active": True,
-        "engagement_type": "CI/CD"
+        "engagement_type": "CI/CD",
+
     }
 
     return dd_client.post_create_data('engagements', engagement_config)
@@ -57,11 +58,13 @@ def import_scan_in_test(engagement_id, scan_type, scan_report):
 def enable_product_for_jira(product_id):
     product_jira_config = {
         "project_key": _config.jira_project,
-        "push_all_issues": True,
+        "push_all_issues": False,
         "enable_engagement_epic_mapping": False,
-        "push_notes": True,
+        "push_notes": False,
         "product": product_id,
-        "conf": 1  # should only have 1 jira conf here
+        "jira_instance": 1,  # should only have 1 jira conf here
+        "risk_acceptance_expiration_notification": True,
+        "product_jira_sla_notification": True
     }
 
     dd_client.post_create_data('jira_product_configurations', product_jira_config)
