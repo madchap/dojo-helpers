@@ -120,5 +120,5 @@ if __name__ == "__main__":
             for scanner_directory in os.scandir(reports_directories):
                 filenames = []
                 files = get_files_from_directory(scanner_directory)
-                for filename in files:
+                for filename in sorted(files, key=lambda e: e.name):
                     import_scan_in_test(engagement_id, Path(filename).absolute().parent.name, Path(filename).absolute())
