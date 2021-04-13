@@ -5,9 +5,10 @@ import _config
 def update_settings():
 
     config = {
-        "enable_auditlog": "false",
+        "enable_auditlog": "true",
         "enable_deduplication": "true",
         "enable_jira": "true",
+        "enable_jira_web_hook": "true"
     }
     dd_client.patch_data('system_settings', dd_entity_id=1, info_dict=config)
 

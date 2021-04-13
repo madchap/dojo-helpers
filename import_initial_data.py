@@ -105,7 +105,8 @@ if __name__ == "__main__":
             enable_product_for_jira(product_id)
         
         # create an engagement
-        for x in range(0, 2):
+        # increase the range to loop over many times..
+        for x in range(0, 1):
             target_start = (start - timedelta(days=random.randint(20, 100))).isoformat()
             target_end = end.isoformat()
             engagement_id = create_test_engagement(product_id)
