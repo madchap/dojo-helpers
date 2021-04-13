@@ -47,10 +47,12 @@ def create_test_test(engagement_id, test_type):
 def import_scan_in_test(engagement_id, scan_type, scan_report):
     with open(scan_report, "rb") as f:
         file_data = f.read()
+        tags_array = [scan_report.stem]
 
     import_data = {
         "scan_type": scan_type,
         "engagement": engagement_id,
+        "tags": tags_array
     }
 
     dd_client.import_report(file_data, import_data)
