@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-set -e
-set -o pipefail
+set -ex
 
 # DD or CB or ...
 TARGET_ENV="$1"
@@ -8,13 +7,33 @@ DEBUG_YES_NO="$2"
 BASE_DIR="/home/fblaise/gitrepos/madchap_ddojo"
 
 function get_admin_token() {
-    echo "Waiting for admin credentials to grab"
+    echo -n "Waiting for admin credentials to grab..."
     cd $BASE_DIR
-    ADMINPASSWD=$(grep -m1 "Admin password:" <(docker-compose logs -f) |awk '{print $5}')
-    sleep 1
-    ADMINTOKEN=$(curl -s -XPOST -H 'content-type: application/json' http://localhost:8080/api/v2/api-token-auth/ -d "{\"username\": \"admin\", \"password\": \"$ADMINPASSWD\"}" |jq -r .token)
-    JIRAWEBHOOK=$(grep -m1 "JIRA Webhook" <(docker-compose logs -f) |awk '{print $6}')
+    ADMINUSER=$(grep -m1 "Admin user:" <(docker-compose logs -f initializer) |awk '{print $5}')
+    echo "Got admin user $ADMINUSER."
+
+    END=$((SECONDS+3))
+    while [ $SECONDS -lt $END ]; do
+        ADMINRANDOMPASSWD=$(grep "Admin password:" <(docker-compose logs initializer) |awk '{print $5}')
+        if [ ${#ADMINRANDOMPASSWD} -eq 41 ]; then
+            echo "Got random password $ADMINRANDOMPASSWD"
+            ADMINPASSWD=$ADMINRANDOMPASSWD
+            break
+        fi
+        sleep 1
+    done
+    [[ -z $ADMINPASSWD ]] && ADMINPASSWD="admin"
+
+    until [ ! -z "$ADMINTOKEN" ] && [ "$ADMINTOKEN" != 'null' ]; do
+        echo -n "Getting token..."
+        sleep 2
+        ADMINTOKEN=$(curl -s -XPOST -H 'content-type: application/json' http://localhost:8080/api/v2/api-token-auth/ -d "{\"username\": \"admin\", \"password\": \"$ADMINPASSWD\"}" |jq -r .token)
+    done
+    echo "Got it."
+
+    JIRAWEBHOOK=$(grep -m1 "JIRA Webhook" <(docker-compose logs -f initializer) |awk '{print $6}')
     echo "JIRA Webhook: /jira/webhook/$JIRAWEBHOOK"
+    
     cd -
     sed -ri "s/dd_token=.*/dd_token=\"$ADMINTOKEN\"/" _config.py
 }
@@ -49,7 +68,7 @@ function enable_toolbar() {
 
 function create_env_file() {
     cat > ${BASE_DIR}/.env <<EOF
-DD_FEATURE_FINDING_GROUPS="True"
+DD_FEATURE_FINDING_GROUPS=True
 EOF
 }
 

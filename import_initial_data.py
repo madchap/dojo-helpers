@@ -52,7 +52,9 @@ def import_scan_in_test(engagement_id, scan_type, scan_report):
     import_data = {
         "scan_type": scan_type,
         "engagement": engagement_id,
-        "tags": tags_array
+        "tags": tags_array,
+        "active": True,
+        "verified": False
     }
 
     dd_client.import_report(file_data, import_data)

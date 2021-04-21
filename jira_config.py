@@ -19,6 +19,8 @@ def create_jira_config():
         "medium_mapping_severity": "Medium",
         "high_mapping_severity": "High",
         "critical_mapping_severity": "Highest",
+        "false_positive_mapping_resolution": "False Positive",
+        "accepted_mapping_resolution": "Risk Accepted"
     }
 
     if not dd_client.exists_jira_url(jira_url):
