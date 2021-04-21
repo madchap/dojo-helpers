@@ -4,6 +4,7 @@ set -ex
 # DD or CB or ...
 TARGET_ENV="$1"
 DEBUG_YES_NO="$2"
+ADMINPASSWD="$3"
 BASE_DIR="/home/fblaise/gitrepos/madchap_ddojo"
 
 function get_admin_token() {
@@ -15,7 +16,7 @@ function get_admin_token() {
     END=$((SECONDS+3))
     while [ $SECONDS -lt $END ]; do
         ADMINRANDOMPASSWD=$(grep "Admin password:" <(docker-compose logs initializer) |awk '{print $5}')
-        if [ ${#ADMINRANDOMPASSWD} -eq 41 ]; then
+        if [ ${#ADMINRANDOMPASSWD} -eq 22 ]; then
             echo "Got random password $ADMINRANDOMPASSWD"
             ADMINPASSWD=$ADMINRANDOMPASSWD
             break
