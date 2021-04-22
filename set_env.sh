@@ -40,6 +40,7 @@ function get_admin_token() {
 }
 
 function enable_google_login() {
+    # in local_settings.py now
     echo "Enabling google SSO"
     # and potentially change other vars in settings.dist.py, need to rename
     cd $BASE_DIR
@@ -67,22 +68,15 @@ function enable_toolbar() {
     fi
 }
 
-function create_env_file() {
-    cat > ${BASE_DIR}/.env <<EOF
-DD_FEATURE_FINDING_GROUPS=True
-EOF
-}
-
 case "$TARGET_ENV" in
     "DD")
         echo "Using local DD"
         ln -sf ./_config.py-DD ./_config.py
         ln -sf ./_jira_creds.py-DD ./_jira_creds.py
         ln -sf ./_slack_creds.py-DD ./_slack_creds.py
-        create_env_file
         enable_toolbar
         get_admin_token
-        enable_google_login
+        # enable_google_login
         ;;
     "CB")
         echo "Using CB prod"
